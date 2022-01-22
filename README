@@ -1,0 +1,45 @@
+# Sandu Stefania-Cristina 334CA
+# Tema 3 - APD
+
+Logica programului este implementata in `tema3.cpp` si
+presupune existenta a 3 procese coordonator, denumite
+`ROOT_0`, `ROOT_1` si `ROOT_2`, fiecare avand un cluster
+de procese care deruleaza anumite calcule. Mentionez ca
+implementarea tine cont de bonus, in mod direct, 
+comportandu-se ca si cand exista o eroare de comunicatie
+deja.
+
+Flow-ul programului poate fi prezentat astfel:
+
+- coordonatorii 0, 1 si 2 citesc din fisierele
+corespunzatoare numarul de procese "subalterne" si
+rank-urile acestora, pe care le stocheaza intr-un array
+
+- isi trimit apoi informatiile despre clustere intre ei,
+procesul 2 avand si un rol de intermediar, el primind date
+de la coord 0 si redirectionandu-le catre coord 1, si 
+vice versa
+
+- apoi fiecare isi construieste topologia ca string,
+apeland functia `string_topo` pentru concatenare, o printeaza
+iar apoi o trimite ca array de char-uri catre lista de
+workeri, care o primesc si o printeaza si ei
+
+- pentru calculele de la task-ul 2, procesul 0 citeste N-ul
+si populeaza vectorul v cu valori, apoi stabileste
+dimensiunea procesata de fiecare worker si lungimea
+pentru fiecare cluster, care are rol si de offset
+
+- de precizat, lungimea pentru ultimul cluster se calculeaza
+ca diferenta dintre N si lungimile clusterelor anterioare,
+pentru cazul in care N este impar; astfel procesul 2 se 
+ocupa si de calculele ramase in plus
+
+- coord 0 le trimite apoi celorlalte procese (lui 1 prin 2)
+
+- fiecare coord trimite partile de array, care trebuie
+procesate, catre workeri, acestia le dubleaza valorile si
+le trimit catre procesele care le sunt coord
+
+- procesul 0 le primeste pe toate si printeaza array-ul
+ca rezultat
